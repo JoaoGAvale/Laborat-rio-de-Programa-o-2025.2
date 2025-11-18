@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TbCloverFilled } from "react-icons/tb"; // Close
 import { GoAlertFill } from "react-icons/go"; // Erro 
 import { FaRegCircleCheck } from "react-icons/fa6"; // Sucesso
@@ -9,16 +9,36 @@ const UserAlert = ({
     isError,
     topMessage,
     bottomMessage,
-    isVisible,
     onClose,
+    duration = 4000, // em milisegundos
 }) =>{
 
     const borderColor = isError ? "#E74C3C" : "#27AE60";
     const progressColor = isError ? "#E74C3C" : "#27AE60";
     const imagem = isError ? <GoAlertFill style={{ color: "#E74C3C" , fontSize:36}}/> : <FaRegCircleCheck style={{ color: "#27AE60" , fontSize:36}}/>;
 
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        let start = performance.now();
+
+        function frame(now) {
+            const elapsed = now - start;
+            const percent = Math.min((elapsed / duration) * 100, 100);
+
+            setProgress(percent);
+
+            if (percent < 100) {
+                requestAnimationFrame(frame);
+            }else{
+                onClose()
+            }
+        }
+
+        requestAnimationFrame(frame);
+    }, []);
+
     return(
-        isVisible && (
             <div style={{ borderColor }} className="fixed w-[100%] top-[60px] left-1/2 transform -translate-x-1/2 z-[3000] bg-[#333333] text-white p-3 rounded-lg border overflow-hidden shadow-md">
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center font-poppins text-[16px]">
@@ -44,11 +64,17 @@ const UserAlert = ({
                     }}
                 />
                 </div>
-                
+                <div
+                    className="absolute bottom-0 left-0 h-1"
+                    style={{
+                        width: `${progress}%`,
+                        transition: "none",
+                        backgroundColor: progressColor,
+                    }}
+                />
             </div>
             
         )
-    )
 }
 
 export default UserAlert;

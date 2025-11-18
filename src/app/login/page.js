@@ -1,12 +1,14 @@
 'use client'
 import React, {useState} from "react";
 import UserAlert from "../components/Alert";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage(){
 
     const [email,setEmail] = useState("")
     const [senha, setSenha] = useState("")
-    const [alerta, setAlerta] = useState(true)
+    const [alerta, setAlerta] = useState(false)
+    const router = useRouter()
     const mockUsuarios = [
         {
             email: "Doador@gmail.com",
@@ -27,11 +29,21 @@ export default function LoginPage(){
     function setUsuarioLocalStorage(){
         const usuarioLogado = mockUsuarios.find(usuario => usuario.email ===email && usuario.senha ===senha)
         if (!usuarioLogado){
-            setAlerta(true)
+            setAlerta({
+                isError: true,
+                topMessage: "Erro!",
+                bottomMessage:"Erro ao realizar login de usuário. Credenciais inválidas.",
+            })
             console.log("Erro ao logar")
         } else {
+            setAlerta({
+                isError: false,
+                topMessage: "Sucesso!",
+                bottomMessage:"Login realizado com sucesso.",
+            })
             localStorage.setItem("user", JSON.stringify(usuarioLogado));
             console.log(usuarioLogado)
+            router.back()
         }
     }
 
@@ -41,13 +53,17 @@ export default function LoginPage(){
 
     return(
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular']">
-        <UserAlert
-            isError={false}
-            topMessage={"Teste"} 
-            bottomMessage={"Testando aqui um negócio..."}
-            isVisible={alerta}
-            onClose={()=>{setAlerta(false)}}
-        />
+        { alerta ? 
+            <UserAlert
+                isError={alerta?.isError}
+                topMessage={alerta?.topMessage} 
+                bottomMessage={alerta?.bottomMessage}
+                onClose={()=>{setAlerta(false)}}
+                key={Math.random(0,1000000)}
+            /> 
+            : 
+            ""
+        }
         <div className="flex flex-col gap-10">
             <div className="page-title text-center">LOGIN</div>
             <div className="w-full flex flex-col shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4">

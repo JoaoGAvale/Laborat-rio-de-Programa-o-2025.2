@@ -10,7 +10,7 @@ export default function Header({ onOpen }) {
       <button onClick={onOpen} className="p-2">
         <Menu />
       </button>
-      <h1 className="text-2xl font-bold">"Nome do Projeto"</h1>
+      <h1 className="text-2xl font-bold text-nowrap">"Nome do Projeto"</h1>
 
       <nav className="flex items-center gap-6">
         <a href="/" className="hover:text-green-900 transition">Início</a>
