@@ -24,3 +24,62 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.slow-spin {
+  animation: slow-spin 3s linear infinite;
+}
+
+@font-face {
+  font-family: "PoppinsRegular";
+  src: url("/fonts/poppins/Poppins-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PoppinsBold";
+  src: url("/fonts/poppins/Poppins-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PoppinsBold";
+  src: url("/fonts/poppins/Poppins-Bold.woff2") format("woff2");
+  font-weight: 400;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "PoppinsItalic";
+  src: url("/fonts/poppins/Poppins-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+
+.page-title {
+  @apply text-[#333333] font-bold text-[24.8px] leading-[29.76px] tracking-[0.744px] text-center uppercase font-["PoppinsBold"];
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .page-title {
+    @apply text-[#333333] text-[24.8px] leading-[29.76px] tracking-[0.744px] text-center uppercase font-["PoppinsBold"];
+  }
+}
+
+/* Web */
+@media (min-width: 641px) {
+  .page-title {
+    @apply text-[#333333] text-[31px] leading-[37.2px] tracking-[0.93px] text-center uppercase font-["PoppinsBold"];
+  }
+}
