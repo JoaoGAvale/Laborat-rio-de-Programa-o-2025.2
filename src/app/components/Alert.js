@@ -39,7 +39,7 @@ const UserAlert = ({
     }, []);
 
     return(
-            <div style={{ borderColor }} className="fixed w-[100%] top-[60px] left-1/2 transform -translate-x-1/2 z-[3000] bg-[#333333] text-white p-3 rounded-lg border overflow-hidden shadow-md">
+            <div style={{ borderColor }} className="fixed w-[100%] top-[60px] left-1/2 transform -translate-x-1/2 z-[3000] bg-stone-600 text-white p-3 rounded-lg border overflow-hidden shadow-md font-['PoppinsRegular']">
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center font-poppins text-[16px]">
                         <div className="w-12 h-12 flex items-center justify-center mr-6 rounded-full">
@@ -65,12 +65,21 @@ const UserAlert = ({
                 />
                 </div>
                 <div
-                    className="absolute bottom-0 left-0 h-1"
-                    style={{
-                        width: `${progress}%`,
-                        transition: "none",
-                        backgroundColor: progressColor,
-                    }}
+                className="absolute bottom-0 left-0 h-2"
+                style={{
+                    width: `${progress}%`,
+                    transition: "none",
+                    backgroundImage: `
+                    repeating-linear-gradient(
+                        45deg,
+                        ${progressColor},
+                        ${progressColor} 8px,
+                        #ffffff 8px,
+                        #ffffff 16px
+                    )
+                    `,
+                    backgroundSize: "24px 100%",
+                }}
                 />
             </div>
             

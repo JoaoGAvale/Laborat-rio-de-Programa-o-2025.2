@@ -1,6 +1,6 @@
 'use client'
 import React, {useState} from "react";
-import UserAlert from "../components/Alert";
+import { useAlert } from "../context/AlertContext";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage(){
@@ -9,6 +9,7 @@ export default function LoginPage(){
     const [senha, setSenha] = useState("")
     const [alerta, setAlerta] = useState(false)
     const router = useRouter()
+    const { showAlert } = useAlert();
     const mockUsuarios = [
         {
             email: "Doador@gmail.com",
@@ -29,21 +30,21 @@ export default function LoginPage(){
     function setUsuarioLocalStorage(){
         const usuarioLogado = mockUsuarios.find(usuario => usuario.email ===email && usuario.senha ===senha)
         if (!usuarioLogado){
-            setAlerta({
+            showAlert({
                 isError: true,
                 topMessage: "Erro!",
                 bottomMessage:"Erro ao realizar login de usuário. Credenciais inválidas.",
             })
             console.log("Erro ao logar")
         } else {
-            setAlerta({
+            showAlert({
                 isError: false,
                 topMessage: "Sucesso!",
                 bottomMessage:"Login realizado com sucesso.",
             })
             localStorage.setItem("user", JSON.stringify(usuarioLogado));
             console.log(usuarioLogado)
-            router.back()
+            router.push('/inicio')
         }
     }
 
@@ -53,7 +54,7 @@ export default function LoginPage(){
 
     return(
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular']">
-        { alerta ? 
+        {/* alerta ? 
             <UserAlert
                 isError={alerta?.isError}
                 topMessage={alerta?.topMessage} 
@@ -63,11 +64,11 @@ export default function LoginPage(){
             /> 
             : 
             ""
-        }
+        */}
         <div className="flex flex-col gap-10">
-            <div className="page-title text-center">LOGIN</div>
-            <div className="w-full flex flex-col shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4">
-                <div>
+            <div className="page-title mt-[60px] text-center">LOGIN</div>
+            <div className="w-full flex flex-col items-center shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4">
+                <div className="max-w-[720px] w-full">
                     <span className="text-[14px] text-left block ml-1">
                         E-MAIL
                     </span>
@@ -77,9 +78,9 @@ export default function LoginPage(){
                     value={email}
                     className="w-full p-[11px] border-2 rounded-md border-gray-300 focus:border-gray-500"
                     onChange={(e)=>setEmail(e.target.value)}
-                    ></input>
+                    />
                 </div>
-                <div>
+                <div className="max-w-[720px] w-full">
                     <span className="text-[14px] text-left block ml-1">
                         SENHA
                     </span>
@@ -91,7 +92,7 @@ export default function LoginPage(){
                     onChange={(e)=>setSenha(e.target.value)}
                     ></input>
                 </div>
-                <div className="flex flex-row justify-end pt-[24px]">
+                <div className="flex flex-col items-center w-full pt-[24px]">
                     <button 
                         className={`bg-green-400 px-5 border-2 border-green-600 rounded-full w-[200px] h-[50px] ${disableButtom() ? "border-pink-500 text-pink-600 bg-white opacity-70" : " hover:bg-green-500 text-white"}`}
                         onClick={()=>{setUsuarioLocalStorage()}}
