@@ -1,10 +1,9 @@
-'use client'
 import "./globals.css";
-import { useState } from "react";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import localFont from "next/font/local";
+import AlertRenderer from "./components/AlertRenderer";
+import { AlertProvider } from "./context/AlertContext";
+import ClientLayout from "./clientLayout";
 
 const poppins = localFont({
   src: [
@@ -32,17 +31,20 @@ const poppins = localFont({
   variable: "--font-poppins",
 });
 
-export default function Layout({ children }) {
-const [open, setOpen] = useState(false);
+  export default function Layout({ children }) {
 
-return (
-<html lang="pt-BR">
-<body className={`${poppins.variable} font-poppins bg-white`}>
-<Header onOpen={() => setOpen(true)} />
-<Sidebar open={open} onClose={() => setOpen(false)} />
-<main className="flex-1 px-[10%] pt-[10%] bg-gray-50">{children}</main>
-<Footer />
-</body>
-</html>
-);
+  return (
+    <html lang="pt-BR">
+      <body className={`${poppins.variable} bg-white`}>
+        <div id="alert-root"/>
+        <AlertProvider>
+          <ClientLayout>
+            <AlertRenderer />
+            <main className="flex-1 px-[10%] pt-[72px] bg-gray-50">{children}</main>
+          </ClientLayout>
+          <Footer />
+        </AlertProvider>
+      </body>
+    </html>
+  );
 }

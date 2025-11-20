@@ -6,7 +6,7 @@ import React from "react";
 export default function Footer() {
   return (
     <footer className="w-full bg-gray-100 text-center py-4 text-sm text-gray-600 border-t">
-      © {new Date().getFullYear()} "Nome do Projeto" — Conectando quem doa e quem precisa.
+      © {new Date().getFullYear()} Prato Solidário — Conectando quem doa e quem precisa.
     </footer>
   );
 }
