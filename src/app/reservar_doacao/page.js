@@ -65,13 +65,13 @@ export default function ReceberDoacoesPage() {
     {
       icon: <ClipboardCheck size={22} />,
       title: "Reservar Doação",
-      className: "text-green-600 hover:text-green-800",
+      className: "text-green-800 ",
       getHref: (item) => `/reservar/${item.id_doacao}`
     },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] text-black">
 
       <main className="pt-24 px-6 flex flex-col items-center gap-6">
         <h1 className="text-3xl font-bold text-center">

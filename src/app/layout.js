@@ -35,7 +35,7 @@ const poppins = localFont({
 
   return (
     <html lang="pt-BR">
-      <body className={`${poppins.variable} bg-white`}>
+      <body className={`${poppins.variable} bg-white text-black`}>
         <div id="alert-root"/>
         <AlertProvider>
           <ClientLayout>

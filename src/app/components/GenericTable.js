@@ -11,7 +11,7 @@ export default function GenericTable({
 }) {
   return (
     <div className={`w-full max-w-5xl bg-white shadow-lg rounded-lg 
-    overflow-hidden border ${className}`}>
+    overflow-hidden shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] ${className}`}>
       <table className="w-full border-collapse text-left">
         <thead className={headerClassName}>
           <tr>
@@ -27,10 +27,10 @@ export default function GenericTable({
         </thead>
 
         <tbody>
-          {data.map((item, index) => (
+          {data.length > 0 ? data.map((item, index) => (
             <tr
               key={item.id || index}
-              className="border-t hover:bg-gray-100 transition"
+              className=" hover:bg-gray-100 transition"
             >
               {columns.map((column) => (
                 <td key={column.key} className="p-3">
@@ -53,7 +53,14 @@ export default function GenericTable({
                 </td>
               )}
             </tr>
-          ))}
+          ))
+          :
+          <tr className=" hover:bg-gray-100 transition">
+            <td className="p-3 flex items-center justify-center gap-4 col-span-[6]">
+                Sem dados.
+            </td>
+          </tr>
+        }
         </tbody>
       </table>
     </div>
