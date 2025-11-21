@@ -11,8 +11,8 @@ export default function GenericTable({
 }) {
   return (
     <div className={`w-full max-w-5xl bg-white shadow-lg rounded-lg 
-    overflow-hidden shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] ${className}`}>
-      <table className="w-full border-collapse text-left">
+    overflow-hidden shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] ${className} text-center`}>
+      <table className="w-full border-collapse text-center">
         <thead className={headerClassName}>
           <tr>
             {columns.map((column) => (
@@ -21,7 +21,7 @@ export default function GenericTable({
               </th>
             ))}
             {actions.length > 0 && (
-              <th className="p-3 text-center">Ações</th>
+              <th className="p-3 text-center">AÇÕES</th>
             )}
           </tr>
         </thead>
@@ -39,7 +39,8 @@ export default function GenericTable({
               ))}
               
               {actions.length > 0 && (
-                <td className="p-3 flex items-center justify-center gap-4">
+                <td className="p-3 align-middle"> {/* Centraliza verticalmente */}
+                  <div className="flex items-center justify-center gap-4 h-full"> {/* h-full para ocupar altura total */}
                   {actions.map((action, actionIndex) => (
                     <a
                       key={actionIndex}
@@ -50,6 +51,7 @@ export default function GenericTable({
                       {action.icon}
                     </a>
                   ))}
+                  </div>
                 </td>
               )}
             </tr>
