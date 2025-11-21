@@ -5,7 +5,7 @@ import { TbCloverFilled } from "react-icons/tb"; // Close
 import { GoAlertFill } from "react-icons/go"; // Erro 
 import { FaRegCircleCheck } from "react-icons/fa6"; // Sucesso
 
-const UserAlert = ({
+const Alert = ({
     isError,
     topMessage,
     bottomMessage,
@@ -86,4 +86,4 @@ const UserAlert = ({
         )
 }
 
-export default UserAlert;
+export default Alert;

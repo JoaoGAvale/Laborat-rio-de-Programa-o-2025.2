@@ -2,7 +2,7 @@
 
 import ReactDOM from "react-dom";
 import { useAlert } from "../context/AlertContext";
-import UserAlert from "./Alert";
+import Alert from "./Alert";
 
 export default function AlertRenderer() {
   const { alert, closeAlert } = useAlert();
@@ -11,7 +11,7 @@ export default function AlertRenderer() {
   if (typeof window === "undefined") return null;
 
   return ReactDOM.createPortal(
-    <UserAlert
+    <Alert
       key={alert.timestamp}
       isError={alert.isError}
       topMessage={alert.topMessage}

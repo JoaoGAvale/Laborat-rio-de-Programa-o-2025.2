@@ -9,7 +9,6 @@ export default function LoginPage(){
 
     const [email,setEmail] = useState("")
     const [senha, setSenha] = useState("")
-    const [alerta, setAlerta] = useState(false)
     const router = useRouter()
     const { showAlert } = useAlert();
     const mockUsuarios = [
@@ -69,6 +68,9 @@ export default function LoginPage(){
         */}
         <div className="flex flex-col gap-10">
             <div className="page-title mt-[60px] text-center">LOGIN</div>
+            <span className="text-gray-600 text-center">
+                Informe os dados abaixo para realizar o login no sistema.
+            </span>
             <div className="w-full flex flex-col items-center shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4">
                 <TextInput
                     value={email}
