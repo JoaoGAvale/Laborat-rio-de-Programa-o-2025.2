@@ -54,7 +54,7 @@ export default function LoginPage(){
     }
 
     return(
-    <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular']">
+    <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] mb-10">
         {/* alerta ? 
             <UserAlert
                 isError={alerta?.isError}
@@ -66,7 +66,7 @@ export default function LoginPage(){
             : 
             ""
         */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col items-center gap-10">
             <div className="page-title mt-[60px] text-center">LOGIN</div>
             <span className="text-gray-600 text-center">
                 Informe os dados abaixo para realizar o login no sistema.
@@ -95,6 +95,9 @@ export default function LoginPage(){
                     />
                 </div>
             </div>
+            <a href="/cadastrar_usuario" className="text-green-800 cursor-pointer text-center w-fit hover:text-green-600">
+                Ainda não está cadastrado?
+            </a>
         </div>
     </div>
     )

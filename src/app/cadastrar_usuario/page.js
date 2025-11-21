@@ -52,13 +52,13 @@ export default function RegisterUserPage(){
     },[tipoSelecionado])
 
     return(
-        <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular']">
-            <div className="flex flex-col gap-10">
+        <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] mb-10">
+            <div className="flex flex-col items-center gap-10">
                 <div className="page-title mt-[60px] text-center">CADASTRO DE USUÁRIO</div>
                 <span className="text-gray-600 text-center">
                     Informe os dados abaixo para realizar o cadastro de usuário.
                 </span>
-                <div className="w-full flex flex-col items-center shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4 mb-10">
+                <div className="w-full flex flex-col items-center shadow-[0_0_4px_4px_rgba(0,0,0,0.1)] p-[60px] rounded-md gap-4">
                     <TextInput
                         value={nome}
                         setValue={setNome}
@@ -117,6 +117,9 @@ export default function RegisterUserPage(){
                         />
                     </div>
                 </div>
+                <a href="/login" className="text-green-800 cursor-pointer text-center w-fit hover:text-green-600">
+                    Já possui usuário cadastrado?
+                </a>
             </div>
         </div>
     )
