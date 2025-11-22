@@ -45,11 +45,11 @@ export const TextInput = ({
             className={`
                 max-w-[720px] w-full text-black font-['PoppinsRegular']
                 ${className}
-                ${disabled ? "opacity-70" : ""}
+                ${disabled ? "opacity-70 bg-gray-100 text-gray-800" : ""}
             `}
         >
             {label && (
-                <span className="text-[14px] text-left block ml-1">
+                <span className="text-[14px] text-left block pl-1 bg-white">
                     {label}
                 </span>
             )}

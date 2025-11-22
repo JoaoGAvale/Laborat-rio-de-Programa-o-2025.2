@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect} from "react";
 import GenericTable from "../components/GenericTable";
-import { ClipboardCheck, Info, ArrowRightCircle, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
 
 export default function HistoricoDoacoesPage() {
