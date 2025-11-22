@@ -14,17 +14,19 @@ export default function LoginPage(){
     const mockUsuarios = [
         {
             email: "Doador@gmail.com",
-            senha: "123",
+            senha: "12341234",
             nome:"Doador das Dores Furtado",
             id:1,
-            perfil:"Doador"
+            perfil:"Doador",
+            cnpj:"45.645.645/6456-45"
         },
         {
             email: "Receptor@gmail.com",
-            senha: "123",
+            senha: "56785678",
             nome:"Receptor da Silva Correia",
             id:2,
-            perfil:"Receptor"
+            perfil:"Receptor",
+            cnpj:"12.312.312/3123-12"
         }
     ]
 
@@ -55,17 +57,6 @@ export default function LoginPage(){
 
     return(
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] mb-10">
-        {/* alerta ? 
-            <UserAlert
-                isError={alerta?.isError}
-                topMessage={alerta?.topMessage} 
-                bottomMessage={alerta?.bottomMessage}
-                onClose={()=>{setAlerta(false)}}
-                key={Math.random(0,1000000)}
-            /> 
-            : 
-            ""
-        */}
         <div className="flex flex-col items-center gap-10">
             <div className="page-title mt-[60px] text-center">LOGIN</div>
             <span className="text-gray-600 text-center">
