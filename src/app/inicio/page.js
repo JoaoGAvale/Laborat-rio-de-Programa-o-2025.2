@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans min-h-screen bg-green-50">
+    <div className="font-['PoppinsRegular'] min-h-screen bg-green-50">
       {/* Header */}
       <header className="bg-green-700 text-white py-12 px-4 text-center">
         <div className="max-w-4xl mx-auto">

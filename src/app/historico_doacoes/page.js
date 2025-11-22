@@ -6,7 +6,6 @@ import { Eye } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
 
 export default function HistoricoDoacoesPage() {
-  const [open, setOpen] = useState(false);
   const [columns, setColumns] = useState([])
   const {showAlert} = useAlert()
   const [isLoading, setIsLoading] = useState(true)

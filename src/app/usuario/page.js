@@ -18,6 +18,11 @@ export default function UserDetailsPage() {
     }
   }, []);
 
+  function sair(){
+    localStorage.removeItem("user");
+    router.push(`/inicio`)
+  }
+
   return isLoading ? (
     <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center">
       <span className="text-gray-500">Carregando...</span>
@@ -82,6 +87,11 @@ export default function UserDetailsPage() {
             />
           </div>
         </div>
+        <Botao
+            onClick={() => sair()}
+            type="cancel"
+            text="SAIR"
+          />
       </div>
     </div>
   );
