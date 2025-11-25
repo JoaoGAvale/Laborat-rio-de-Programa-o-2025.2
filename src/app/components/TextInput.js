@@ -45,11 +45,11 @@ export const TextInput = ({
             className={`
                 max-w-[720px] w-full text-black font-['PoppinsRegular']
                 ${className}
-                ${disabled ? "opacity-70 bg-gray-100 text-gray-800" : ""}
+                ${disabled ? "opacity-70 text-gray-800" : ""}
             `}
         >
             {label && (
-                <span className="text-[14px] text-left block pl-1 bg-white">
+                <span className="text-[14px] text-left block pl-1">
                     {label}
                 </span>
             )}
@@ -58,10 +58,11 @@ export const TextInput = ({
                 type={type}
                 placeholder={placeholder}
                 value={value}
-                className="
+                className={`
                     w-full p-[11px] border-2 rounded-md border-gray-300
                     focus:border-gray-500 placeholder:text-gray-500
-                "
+                    ${disabled ? "bg-gray-100" : ""}
+                `}
                 onChange={handleChange}
                 disabled={disabled}
                 maxLength={mask === "cnpj" ? 18 : mask === "cpf" ? 14 : undefined}

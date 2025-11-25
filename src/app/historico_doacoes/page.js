@@ -238,7 +238,7 @@ export default function HistoricoDoacoesPage() {
 
       <main className="pt-24 flex flex-col items-center gap-6 mb-10">
         <h1 className="text-3xl font-bold text-center">
-          HISTORICO DE {perfil==="Doador" ? "DOAÇÕES" : perfil==="Receptor"?"RECEBIMENTOS" :"" }
+          HISTÓRICO DE {perfil==="Doador" ? "DOAÇÕES" : perfil==="Receptor"?"RECEBIMENTOS" :"" }
         </h1>
 
         <span className="text-gray-600 text-center">
