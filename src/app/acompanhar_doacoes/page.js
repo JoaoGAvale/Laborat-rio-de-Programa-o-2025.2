@@ -145,7 +145,6 @@ export default function AcompanharDoacoesPage() {
   }
 ])
 
-
   // Colunas específicas para doações
   const columns = [
     {
