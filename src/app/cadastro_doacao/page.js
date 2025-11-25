@@ -58,7 +58,7 @@ export default function RegisterDonationPage() {
 
         // Redirecionar para a página inicial após sucesso
         setTimeout(() => {
-            router.push('/inicio');
+            router.push('/acompanhar_doacoes');
         }, 2000);
     };
 
@@ -79,7 +79,7 @@ export default function RegisterDonationPage() {
         setValidade("");
 
         // Redirecionar para a página inicial
-        router.push('/inicio');
+        router.back();
     };
 
     const isFormValid = descricao && quantidade && unidade && validade;
@@ -87,8 +87,8 @@ export default function RegisterDonationPage() {
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
             <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                    Cadastrar Doação
+                <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center font-['PoppinsRegular']">
+                    CADASTRAR DOAÇÃO
                 </h1>
                 
                 <div className="space-y-6">
