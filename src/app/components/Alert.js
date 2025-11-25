@@ -21,6 +21,7 @@ const Alert = ({
 
     useEffect(() => {
         let start = performance.now();
+        let frameId;
 
         function frame(now) {
             const elapsed = now - start;
@@ -29,14 +30,17 @@ const Alert = ({
             setProgress(percent);
 
             if (percent < 100) {
-                requestAnimationFrame(frame);
-            }else{
-                onClose()
+                frameId = requestAnimationFrame(frame);
+            } else {
+                onClose();
             }
         }
 
-        requestAnimationFrame(frame);
-    }, []);
+        frameId = requestAnimationFrame(frame);
+
+        return () => cancelAnimationFrame(frameId);
+    }, [duration, topMessage, bottomMessage]);
+
 
     return(
             <div style={{ borderColor }} className="fixed w-[100%] top-[60px] left-1/2 transform -translate-x-1/2 z-[3000] bg-stone-600 text-white p-3 rounded-lg border overflow-hidden shadow-md font-['PoppinsRegular']">

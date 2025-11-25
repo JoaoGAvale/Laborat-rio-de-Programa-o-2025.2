@@ -3,7 +3,7 @@
 import React, {useState, useEffect} from "react";
 
 // src/app/components/Sidebar.js
-import { Home, Gift, User, Inbox, Menu, History } from "lucide-react";
+import { Home, Gift, Inbox, Menu, History } from "lucide-react";
 
 export default function Sidebar({ open, onClose }) {
   const [usuario, setUsuario] = useState(null);
@@ -33,16 +33,9 @@ export default function Sidebar({ open, onClose }) {
           </a>
           
           <a className="flex items-center gap-3 p-2 rounded hover:bg-green-100 transition text-green-600 hover:text-green-800" href="/acompanhar_doacoes">
-            <User size={27}/> Acompanhar Doação
+            <Inbox size={27}/> Acompanhar Doação
           </a>
           {
-            usuario?.perfil === "Doador" ? 
-            <>
-              <a className="flex items-center gap-3 p-2 rounded hover:bg-green-100 transition text-green-600 hover:text-green-800" href="/doacoes">
-                <Inbox size={27}/> Minhas Doações
-              </a>
-            </>
-            :
             usuario?.perfil === "Receptor" ? 
             <>
               <a className="flex items-center gap-3 p-2 rounded hover:bg-green-100 transition text-green-600 hover:text-green-800" href="/reservar_doacao">

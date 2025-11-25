@@ -44,7 +44,8 @@ export default function GenericTable({
                   {actions.map((action, actionIndex) => (
                     <a
                       key={actionIndex}
-                      href={action.getHref ? action.getHref(item) : `/${action.path}/${item.id}`}
+                      href={action.getHref ? action.getHref(item) : undefined}
+                      onClick={action.onClick ? ()=>{action.onClick(item)} : ()=>{}}
                       className={action.className}
                       title={action.title}
                     >
@@ -58,7 +59,7 @@ export default function GenericTable({
           ))
           :
           <tr className=" hover:bg-gray-100 transition">
-            <td className="p-3 flex items-center justify-center gap-4 col-span-[6]">
+            <td className="p-3 flex items-center justify-center col-span-full w-full">
                 Sem dados.
             </td>
           </tr>

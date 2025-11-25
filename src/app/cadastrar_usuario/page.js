@@ -32,10 +32,11 @@ export default function RegisterUserPage(){
             senha: senha,
             nome:nome,
             id:tipoSelecionado === "Doador" ? 1 : 2,
-            perfil:tipoSelecionado
+            perfil:tipoSelecionado,
+            cnpj:cnpj
         }
         localStorage.setItem("user", JSON.stringify(usuarioCadastrado));
-        router.push(`usuario/${tipoSelecionado === "Doador" ? 1 : 2}`)
+        router.push(`/usuario`)
     }
 
     useEffect(()=>{
