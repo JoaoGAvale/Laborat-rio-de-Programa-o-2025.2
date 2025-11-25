@@ -251,7 +251,40 @@ const mockDoacoes = [
 
 const DoacaoDetalhesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [doacao, setDoacao] = useState(null);
+  const [doacao, setDoacao] = useState({
+    id_doacao: 12,
+    doador: "Atacadão",
+    receptor: "CUFA",
+    descricao: "Cesta de alimentos variados",
+    quantidade: 3,
+    unidade: "UNIDADE",
+    validade: "2024-12-31",
+    data_cadastro: "2024-01-15",
+    data: "2025-01-22",
+    fotografia: "/images/cesta.jpg",
+    status: "Disponível",
+    confirmacao_entrega: false,
+    confirmacao_recebimento: false,
+    endereco: {
+      logradouro: "Rua das Flores",
+      numero: "123",
+      cep: "01234-567",
+      cidade: "São Paulo",
+      estado: "SP"
+    },
+    doador_info: {
+      nome: "Atacadão",
+      telefone: "(11) 99999-9999",
+      email: "contato@atacadao.com",
+      endereco: "Rua das Flores, 123 - São Paulo/SP"
+    },
+    receptor_info: {
+      nome: "CUFA",
+      telefone: "(11) 98888-8888",
+      email: "cufa@email.com",
+      endereco: "Av. Principal, 456 - São Paulo/SP"
+    }
+  },);
   const [perfil, setPerfil] = useState("");
   const router = useRouter();
   const params = useParams();
@@ -278,7 +311,7 @@ const DoacaoDetalhesPage = () => {
         
         setTimeout(() => {
           const doacaoEncontrada = mockDoacoes.find(d => d.id_doacao === parseInt(params.id));
-          if (doacaoEncontrada) {
+          /*if (doacaoEncontrada) {
             setDoacao(doacaoEncontrada);
           } else {
             showAlert({
@@ -286,7 +319,7 @@ const DoacaoDetalhesPage = () => {
               topMessage: "Erro!",
               bottomMessage: "Doação não encontrada."
             });
-          }
+          }*/
           setIsLoading(false);
         }, 1000);
       } catch (error) {
@@ -360,11 +393,11 @@ const DoacaoDetalhesPage = () => {
       topMessage: "Sucesso!",
       bottomMessage: "Doação cancelada com sucesso."
     });
-    router.back();
+    router.push('/acompanhar_doacoes');
   };
 
   const handleEditarDoacao = () => {
-    router.push('/cadastra_doacao');
+    //router.push('/cadastro_doacao');
   };
 
   const handleConfirmarEntrega = () => {
@@ -659,23 +692,30 @@ const DoacaoDetalhesPage = () => {
             />
             
             <div className="flex gap-4">
-              {perfil === "Receptor" && doacao.status === 'Disponível' && (
-                <Botao
-                  onClick={handleReservarDoacao}
-                  type="normal"
-                  text="RESERVAR DOAÇÃO"
-                />
+              {perfil === "Receptor" && (
+                <>
+                  <Botao
+                    onClick={handleReservarDoacao}
+                    type="normal"
+                    text="RESERVAR DOAÇÃO"
+                  />
+                  <Botao
+                    onClick={handleEntrarContato}
+                    type="normal"
+                    text="ENTRAR EM CONTATO"
+                  />
+                </>
               )}
               
-              {perfil === "Receptor" && doacao.status === 'Reservada' && (
+              {/*perfil === "Receptor" && doacao.status === 'Reservada' && (
                 <Botao
                   onClick={handleConfirmarEntrega}
                   type="normal"
                   text="CONFIRMAR ENTREGA"
                 />
-              )}
+              )*/}
 
-              {perfil === "Doador" && doacao.status === 'Disponível' && (
+              {perfil === "Doador" && (
                 <>
                   <Botao
                     onClick={handleEditarDoacao}
@@ -684,27 +724,27 @@ const DoacaoDetalhesPage = () => {
                   />
                   <Botao
                     onClick={handleCancelarDoacao}
-                    type="cancel"
+                    type="normal"
                     text="CANCELAR DOAÇÃO"
                   />
                 </>
               )}
 
-              {perfil === "Doador" && doacao.status === 'Reservada' && (
+              {/*perfil === "Doador" && doacao.status === 'Reservada' && (
                 <Botao
                   onClick={handleConfirmarEntrega}
                   type="normal"
                   text="CONFIRMAR ENTREGA"
                 />
-              )}
+              )*/}
               
-              {(doacao.status === 'Disponível' || doacao.status === 'Reservada') && (
+              {/*(doacao.status === 'Disponível' || doacao.status === 'Reservada') && (
                 <Botao
-                  onClick={handleEntrarContato}
-                  type="normal"
-                  text="ENTRAR EM CONTATO"
-                />
-              )}
+                    onClick={handleEntrarContato}
+                    type="normal"
+                    text="ENTRAR EM CONTATO"
+                  />
+              )*/}
             </div>
           </div>
         </div>

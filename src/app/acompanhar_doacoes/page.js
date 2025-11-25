@@ -176,7 +176,7 @@ export default function AcompanharDoacoesPage() {
       icon: <EyeIcon size={22} />,
       title: "Detalhes da Doação",
       className: "text-green-800 ",
-      getHref: (item) => `/doacao/${item.id_doacao}`
+      getHref: (item) => `/detalhes/${item.id_doacao}`
     },
     {
       icon: <Trash2Icon size={22} />,

@@ -10,7 +10,7 @@ export default function NotificationPage(){
       icon: <Eye size={27} />,
       title: "Ver Detalhes",
       className: "text-green-800",
-      getHref: (item) => `/doacao/${item.id_doacao}`
+      getHref: (item) => `/detalhes/${item.id_doacao}`
     },
   ];
   const notificationsData = [
