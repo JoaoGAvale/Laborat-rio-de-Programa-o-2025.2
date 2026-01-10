@@ -1,58 +1,55 @@
 'use client'
+
 import React, {useState} from "react";
 import { useAlert } from "../context/AlertContext";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/TextInput";
 import { Botao } from "../components/Botao";
+import { API_ROUTES } from "../utils/routes";
+import { apiFetch } from "../utils/apifetch";
 
 export default function LoginPage(){
 
     const [email,setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [isLoging, setIsLoging] = useState(false)
     const router = useRouter()
     const { showAlert } = useAlert();
-    const mockUsuarios = [
-        {
-            email: "Doador@gmail.com",
-            senha: "12341234",
-            nome:"Doador das Dores Furtado",
-            id:1,
-            perfil:"Doador",
-            cnpj:"45.645.645/6456-45"
-        },
-        {
-            email: "Receptor@gmail.com",
-            senha: "56785678",
-            nome:"Receptor da Silva Correia",
-            id:2,
-            perfil:"Receptor",
-            cnpj:"12.312.312/3123-12"
-        }
-    ]
 
-    function setUsuarioLocalStorage(){
-        const usuarioLogado = mockUsuarios.find(usuario => usuario.email ===email && usuario.senha ===senha)
-        if (!usuarioLogado){
-            showAlert({
-                isError: true,
-                topMessage: "Erro!",
-                bottomMessage:"Erro ao realizar login de usuário. Credenciais inválidas.",
-            })
-            console.log("Erro ao logar")
-        } else {
+    async function login(){
+        try{
+            setIsLoging(true)
+            const response = await apiFetch(API_ROUTES.AUTH.LOGIN,{
+                method:"POST",
+                body:{
+                    email:email,
+                    password:senha
+                },
+            }
+            )
+            const data = await response.json()
+            if(!response.ok){
+                throw new Error("Erro ao realizar login de usuário.")
+            }
+            localStorage.setItem("user", JSON.stringify(data.user));
             showAlert({
                 isError: false,
                 topMessage: "Sucesso!",
                 bottomMessage:"Login realizado com sucesso.",
             })
-            localStorage.setItem("user", JSON.stringify(usuarioLogado));
-            console.log(usuarioLogado)
             router.push('/inicio')
+        }catch{
+            showAlert({
+                isError: true,
+                topMessage: "Erro!",
+                bottomMessage:"Erro ao realizar login de usuário. Credenciais inválidas.",
+            })
+            setIsLoging(false)
         }
     }
 
     function disableButtom(){
-        return (!email.trim() || !senha.trim())
+        return (!email.trim() || !senha.trim() || isLoging)
     }
 
     return(
@@ -79,9 +76,10 @@ export default function LoginPage(){
                 />
                 <div className="flex flex-col items-center w-full pt-[24px]">
                     <Botao
-                        onClick={setUsuarioLocalStorage}
+                        onClick={()=>login()}
                         disabled={disableButtom()}
-                        type="normal"
+                        type={isLoging?"cancel":"normal"}
+                        loading={isLoging}
                         text="CONFIRMAR"
                     />
                 </div>
