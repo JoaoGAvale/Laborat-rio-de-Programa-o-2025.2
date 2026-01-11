@@ -12,54 +12,68 @@ export default function RegisterDonationPage() {
     const { showAlert } = useAlert();
     const router = useRouter();
 
-    const handleSubmit = () => {
-        // Validação básica
+    const handleSubmit = async () => { 
         if (!descricao || !quantidade || !unidade || !validade) {
             showAlert({
                 isError: true,
                 topMessage: "Erro!",
-                bottomMessage: "Erro ao cadastrar doação. Preencha todos os campos obrigatórios.",
+                bottomMessage: "Preencha todos os campos obrigatórios.",
             });
             return;
         }
 
-        // Validação de quantidade
-        if (isNaN(quantidade) || parseInt(quantidade) <= 0) {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.id_usuario) {
+                throw new Error("Sessão expirada. Faça login novamente.");
+            }
+
+            const novaDoacao = {
+                descricao: descricao,
+                quantidade: parseFloat(quantidade),
+                unidade: unidade,
+                validade: validade,            
+                doador_id: user.id_usuario,
+                status: "Disponivel"
+            };
+
+            const response = await fetch("http://127.0.0.1:5000/doacao/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(novaDoacao),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Erro ao salvar no servidor.");
+            }
+
+            showAlert({
+                isError: false,
+                topMessage: "Sucesso!",
+                bottomMessage: "Doação cadastrada com sucesso.",
+            });
+
+            // Limpar formulário
+            setDescricao("");
+            setQuantidade("");
+            setUnidade("");
+            setValidade("");
+
+            // Redirecionar
+            setTimeout(() => {
+                router.push('/acompanhar_doacoes');
+            }, 2000);
+
+        } catch (error) {
             showAlert({
                 isError: true,
                 topMessage: "Erro!",
-                bottomMessage: "Erro ao cadastrar doação. A quantidade deve ser um número positivo.",
+                bottomMessage: error.message,
             });
-            return;
         }
-
-        // Aqui você implementaria a lógica para salvar a doação
-        const doacao = {
-            descricao,
-            quantidade: parseInt(quantidade),
-            unidade,
-            validade
-        };
-
-        console.log("Doação cadastrada:", doacao);
-        
-        // Mostrar alerta de sucesso
-        showAlert({
-            isError: false,
-            topMessage: "Sucesso!",
-            bottomMessage: "Doação cadastrada com sucesso.",
-        });
-        
-        // Limpar formulário após cadastro
-        setDescricao("");
-        setQuantidade("");
-        setUnidade("");
-        setValidade("");
-
-        // Redirecionar para a página inicial após sucesso
-        setTimeout(() => {
-            router.push('/acompanhar_doacoes');
-        }, 2000);
     };
 
     const handleCancel = () => {
