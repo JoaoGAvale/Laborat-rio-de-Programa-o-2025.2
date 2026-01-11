@@ -41,21 +41,17 @@ export const FormUsuario = ({
         "Confira abaixo as informações do usuário.",
         "Informe os dados de usuário que devem ser alterados."
     ]
+    const actions = [
+        cadastrarUsuario,
+        moverParaEditar,
+        editarUsuario,
+    ]
 
     const mainButtonText = tiposPagina.includes(pagina) && pagina !== "visualizar" ? "CONFIRMAR" : pagina === "visualizar" ? "EDITAR" : ""
     const cancelButtonText = tiposPagina.includes(pagina) && pagina !== "visualizar" ? "CANCELAR" : pagina === "visualizar" ? "VOLTAR" : ""
-    const title = titles.map((titulo,index)=>{
-        if(pagina===tiposPagina[index]){
-            return titulo
-        }
-        return ""
-    })
-    const label = labels.map((l,index)=>{
-        if(pagina===tiposPagina[index]){
-            return l
-        }
-        return ""
-    })
+    const mainButtonAction = pagina === "cadastrar" ? actions[0] : pagina === "visualizar" ? actions[1] : pagina === "editar" ? actions[2] : ""
+    const title = pagina === "cadastrar" ? titles[0] : pagina === "visualizar" ? titles[1] : pagina === "editar" ? titles[2] : ""
+    const label = pagina === "cadastrar" ? labels[0] : pagina === "visualizar" ? labels[1] : pagina === "editar" ? labels[2] : ""
 
     // Usado em visualizar e editar
     async function carregar_dados() {
@@ -64,6 +60,7 @@ export const FormUsuario = ({
             const user = JSON.parse(localStorage.getItem("user"));
             setNome(user.nome)
             setCnpj(user.cnpj)
+            setEmail(user.email)
             setTipoSelecionado(user.perfil)
         }catch{
             showAlert({
@@ -83,10 +80,10 @@ export const FormUsuario = ({
                 cnpj.trim().length < 18 || 
                 !nome.trim() || 
                 !email.trim() || 
-                senha.trim().length < 8 || 
-                !confirmarSenha.trim() || 
-                !tipoSelecionado || 
-                senha !==confirmarSenha
+                ((senha.trim().length < 3 || 
+                senha !==confirmarSenha) && 
+                pagina === "cadastrar") ||
+                !tipoSelecionado
             )
         }
         return false
@@ -147,22 +144,68 @@ export const FormUsuario = ({
             })
             const data = await response.json()
             if(!response.ok){
-                throw new Error("Erro ao cadastrar usuário.")
+                if (response.status === 409){
+                    throw new Error("O email informado já está sendo utilizado.")
+                }
+                throw new Error("Erro ao cadastrar usuário. Tente novamente mais tarde.")
             }
-        }catch{
+            localStorage.setItem("user", JSON.stringify(data.user));
+            showAlert({
+                isError: false,
+                topMessage: "Sucesso!",
+                bottomMessage:"Usuário cadastrado com sucesso.",
+            })
+            router.push('/inicio')
+        }catch(e){
             showAlert({
                 isError: true,
                 topMessage: "Erro!",
-                bottomMessage:"Erro ao realizar logout de usuário.",
+                bottomMessage:e.message,
             })
-
         }finally{
             setRealizandoOperacao(false)
         }
     }
 
-    async function editarUsuario(params) {
-        
+    async function editarUsuario() {
+        try{
+            setRealizandoOperacao(true)
+            const response = await apiFetch(API_ROUTES.USUARIO.UPDATE,{
+                method:"PUT",
+                auth:true,
+                body:{
+                    nome:nome, 
+                    cnpj:cnpj, 
+                    email:email,
+                }
+            })
+            const data = await response.json()
+            if(!response.ok){
+                if (response.status === 409){
+                    throw new Error("O email informado já está sendo utilizado.")
+                }
+                throw new Error("Erro ao editar usuário. Tente novamente mais tarde.")
+            }
+            localStorage.setItem("user", JSON.stringify(data.user));
+            showAlert({
+                isError: false,
+                topMessage: "Sucesso!",
+                bottomMessage:"Usuário editado com sucesso.",
+            })
+            router.push('/usuario')
+        }catch(e){
+            showAlert({
+                isError: true,
+                topMessage: "Erro!",
+                bottomMessage:e.message,
+            })
+        }finally{
+            setRealizandoOperacao(false)
+        }
+    }
+
+    function moverParaEditar(){
+        router.push(`/usuario/editar_usuario`)
     }
 
     useEffect(()=>{
@@ -256,10 +299,9 @@ export const FormUsuario = ({
                     text={cancelButtonText}
                 />
                 <Botao
-                    onClick={() =>
-                    router.push(`/usuario/editar_usuario`)
-                    }
-                    type="normal"
+                    onClick={mainButtonAction}
+                    type={realizandoOperacao?"cancel":"normal"}
+                    loading={realizandoOperacao}
                     text={mainButtonText}
                     disabled={disableButtom()}
                 />

@@ -171,7 +171,7 @@ export default function HistoricoDoacoesPage() {
   // Ações específicas para doações
   const actions = [
     {
-      icon: <Eye size={27} />,
+      icon: (item)=> <Eye size={27} />,
       title: "Ver Detalhes",
       className: "text-green-800",
       onClick: (item) => router.push(`/detalhes/${item.id_doacao}`)
