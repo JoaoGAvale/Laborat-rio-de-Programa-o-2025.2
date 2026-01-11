@@ -12,13 +12,13 @@ export default function LoginPage(){
 
     const [email,setEmail] = useState("")
     const [senha, setSenha] = useState("")
-    const [isLoging, setIsLoging] = useState(false)
+    const [isLogin, setIsLogin] = useState(false)
     const router = useRouter()
     const { showAlert } = useAlert();
 
     async function login(){
         try{
-            setIsLoging(true)
+            setIsLogin(true)
             const response = await apiFetch(API_ROUTES.AUTH.LOGIN,{
                 method:"POST",
                 auth:true,
@@ -43,14 +43,14 @@ export default function LoginPage(){
             showAlert({
                 isError: true,
                 topMessage: "Erro!",
-                bottomMessage:"Erro ao realizar login de usuário. Credenciais inválidas.",
+                bottomMessage:"Erro ao realizar login de usuário.",
             })
-            setIsLoging(false)
+            setIsLogin(false)
         }
     }
 
     function disableButtom(){
-        return (!email.trim() || !senha.trim() || isLoging)
+        return (!email.trim() || !senha.trim() || isLogin)
     }
 
     return(
@@ -79,8 +79,8 @@ export default function LoginPage(){
                     <Botao
                         onClick={()=>login()}
                         disabled={disableButtom()}
-                        type={isLoging?"cancel":"normal"}
-                        loading={isLoging}
+                        type={isLogin?"cancel":"normal"}
+                        loading={isLogin}
                         text="CONFIRMAR"
                     />
                 </div>

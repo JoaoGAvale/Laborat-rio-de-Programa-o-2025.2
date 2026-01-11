@@ -8,7 +8,7 @@ export const API_ROUTES = {
         ME:`${API_URL}/auth/me`,
     },
     USUARIO:{
-
+        CREATE:`${API_URL}/usuario/`
     },
     CIDADE:{
 
