@@ -21,6 +21,7 @@ export default function LoginPage(){
             setIsLoging(true)
             const response = await apiFetch(API_ROUTES.AUTH.LOGIN,{
                 method:"POST",
+                auth:true,
                 body:{
                     email:email,
                     password:senha

@@ -4,12 +4,14 @@ import React, { useState, useEffect} from "react";
 import GenericTable from "../components/GenericTable";
 import { Eye } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
+import { useRouter } from "next/navigation";
 
 export default function HistoricoDoacoesPage() {
   const [columns, setColumns] = useState([])
   const {showAlert} = useAlert()
   const [isLoading, setIsLoading] = useState(true)
   const [perfil, setPerfil] = useState("")
+  const router = useRouter()
 
   // Dados específicos para doações
   const doacoes = [
@@ -172,7 +174,7 @@ export default function HistoricoDoacoesPage() {
       icon: <Eye size={27} />,
       title: "Ver Detalhes",
       className: "text-green-800",
-      getHref: (item) => `/detalhes/${item.id_doacao}`
+      onClick: (item) => router.push(`/detalhes/${item.id_doacao}`)
     },
   ];
 

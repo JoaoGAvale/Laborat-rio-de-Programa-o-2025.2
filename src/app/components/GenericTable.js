@@ -21,7 +21,7 @@ export default function GenericTable({
               </th>
             ))}
             {actions.length > 0 && (
-              <th className="p-3 text-center">AÇÕES</th>
+              <th className="p-3 text-center">Ações</th>
             )}
           </tr>
         </thead>
@@ -42,15 +42,14 @@ export default function GenericTable({
                 <td className="p-3 align-middle"> {/* Centraliza verticalmente */}
                   <div className="flex items-center justify-center gap-4 h-full"> {/* h-full para ocupar altura total */}
                   {actions.map((action, actionIndex) => (
-                    <a
+                    <div
                       key={actionIndex}
-                      href={action.getHref ? action.getHref(item) : undefined}
                       onClick={action.onClick ? ()=>{action.onClick(item)} : ()=>{}}
                       className={action.className}
                       title={action.title}
-                    >
-                      {action.icon}
-                    </a>
+                     >
+                      {typeof action.icon === "function" ? action.icon(item) : action.item}
+                    </div>
                   ))}
                   </div>
                 </td>
@@ -59,7 +58,10 @@ export default function GenericTable({
           ))
           :
           <tr className=" hover:bg-gray-100 transition">
-            <td className="p-3 flex items-center justify-center col-span-full w-full">
+            <td 
+              className="p-3 text-center"
+              colSpan={columns.length + (actions.length > 0 ? 1 : 0)}
+            >
                 Sem dados.
             </td>
           </tr>

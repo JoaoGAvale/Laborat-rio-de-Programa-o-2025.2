@@ -34,7 +34,6 @@ export async function apiFetch(
   if (body && method !== "GET") {
     config.body = JSON.stringify(body);
   }
-
   const response = await fetch(url, config);
 
   return response; 

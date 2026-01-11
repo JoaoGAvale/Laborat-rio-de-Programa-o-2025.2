@@ -23,7 +23,8 @@ export const API_ROUTES = {
 
     },
     NOTIFICACAO:{
-
+        PAGINA:`${API_URL}/notificacao/pagina_notificacoes`,
+        UPDATE:(notificacao_id)=>`${API_URL}/notificacao/${notificacao_id}`
     },
     UNIDADE:{
 
