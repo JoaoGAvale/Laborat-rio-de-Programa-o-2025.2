@@ -9,129 +9,8 @@ export default function ReceberDoacoesPage() {
 
   const {showAlert} = useAlert()
   // Dados específicos para doações
-  const [doacoes, setDoacoes] = useState([
-    {
-      id_doacao: 12,
-      descricao: "Cesta de alimentos variados",
-      quantidade: 3,
-      unidade: "UNIDADE",
-      validade: "2025-01-22",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 18,
-      descricao: "Pacote de arroz 5kg",
-      quantidade: 10,
-      unidade: "KG",
-      validade: "2024-12-10",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 25,
-      descricao: "Leite integral caixa 1L",
-      quantidade: 20,
-      unidade: "LITRO",
-      validade: "2025-02-01",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 31,
-      descricao: "Feijão preto 1kg",
-      quantidade: 15,
-      unidade: "KG",
-      validade: "2025-03-18",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 37,
-      descricao: "Macarrão espaguete 500g",
-      quantidade: 25,
-      unidade: "KG",
-      validade: "2025-04-09",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 41,
-      descricao: "Café torrado e moído 500g",
-      quantidade: 12,
-      unidade: "KG",
-      validade: "2025-06-15",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 46,
-      descricao: "Óleo de soja 900ml",
-      quantidade: 30,
-      unidade: "LITRO",
-      validade: "2025-05-03",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 52,
-      descricao: "Farinha de trigo 1kg",
-      quantidade: 20,
-      unidade: "KG",
-      validade: "2025-07-12",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 58,
-      descricao: "Detergente líquido 500ml",
-      quantidade: 40,
-      unidade: "UNIDADE",
-      validade: "2026-01-22",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 63,
-      descricao: "Papel higiênico pacote 12 rolos",
-      quantidade: 10,
-      unidade: "UNIDADE",
-      validade: "2028-09-10",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 67,
-      descricao: "Sabonete neutro",
-      quantidade: 30,
-      unidade: "UNIDADE",
-      validade: "2026-04-30",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 72,
-      descricao: "Açúcar refinado 1kg",
-      quantidade: 18,
-      unidade: "KG",
-      validade: "2025-08-14",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 79,
-      descricao: "Leite em pó integral 400g",
-      quantidade: 22,
-      unidade: "UNIDADE",
-      validade: "2025-03-20",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 84,
-      descricao: "Caixa de suco 1L",
-      quantidade: 14,
-      unidade: "LITRO",
-      validade: "2025-10-01",
-      status: "Disponível"
-    },
-    {
-      id_doacao: 90,
-      descricao: "Azeite de oliva 500ml",
-      quantidade: 8,
-      unidade: "UNIDADE",
-      validade: "2026-02-11",
-      status: "Disponível"
-    }
-  ])
-
+  const [doacoes, setDoacoes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   // Colunas específicas para doações
   const columns = [
     {
@@ -167,16 +46,45 @@ export default function ReceberDoacoesPage() {
     },
   ];
 
-  function reservarDoacao(id){
-    setDoacoes(prev=>prev.filter(doacao=>doacao.id_doacao!==id))
+  // 1. Função que busca todas as doações com status 'Disponivel'
+  const fetchDisponiveis = async () => {
+    try {
+      setIsLoading(true);
+      // Chamada para a rota genérica com filtro de query string
+      const response = await fetch("http://127.0.0.1:5000/doacao/disponiveis");
+      
+      if (!response.ok) throw new Error("Erro ao buscar doações.");
+      
+      const data = await response.json();
+      setDoacoes(data);
+    } catch (error) {
+      console.error(error);
+      showAlert({
+        isError: true,
+        topMessage: "Erro!",
+        bottomMessage: "Não foi possível carregar as doações disponíveis.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 2. useEffect para disparar a busca assim que a página carregar
+  useEffect(() => {
+    fetchDisponiveis();
+  }, []);
+
+  console.log(doacoes)
+
+  function reservarDoacao(id) {
+    // Por enquanto removemos apenas da tela
+    setDoacoes(prev => prev.filter(doacao => doacao.id_doacao !== id));
     showAlert({
       isError: false,
       topMessage: "Sucesso!",
       bottomMessage: `Doação reservada com sucesso.`,
-    })
+    });
   }
-
-  useEffect(()=>{console.log("Doacoes: ", doacoes)},[doacoes])
 
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] text-black">
