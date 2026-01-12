@@ -49,7 +49,7 @@ export default function HistoricoDoacoesPage() {
         {
           key: "data_cadastro",
           label: "DATA DA ENTREGA",
-          render: (item) => new Date(item.data_cadastro).toLocaleDateString("pt-BR")
+          render: (item) => new Date(item.data_entrega).toLocaleDateString("pt-BR")
         },
       ])
       
