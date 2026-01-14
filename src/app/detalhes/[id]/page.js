@@ -5,249 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import { Botao } from "@/app/components/Botao";
 import { TextInput } from "@/app/components/TextInput";
 import { useAlert } from "@/app/context/AlertContext";
-
-// Dados mockados
-const mockDoacoes = [
-  {
-    id_doacao: 12,
-    doador: "Atacadão",
-    receptor: "CUFA",
-    descricao: "Cesta de alimentos variados",
-    quantidade: 3,
-    unidade: "UNIDADE",
-    validade: "2024-12-31",
-    data_cadastro: "2024-01-15",
-    data: "2025-01-22",
-    fotografia: "/images/cesta.jpg",
-    status: "Disponível",
-    confirmacao_entrega: false,
-    confirmacao_recebimento: false,
-    endereco: {
-      logradouro: "Rua das Flores",
-      numero: "123",
-      cep: "01234-567",
-      cidade: "São Paulo",
-      estado: "SP"
-    },
-    doador_info: {
-      nome: "Atacadão",
-      telefone: "(11) 99999-9999",
-      email: "contato@atacadao.com",
-      endereco: "Rua das Flores, 123 - São Paulo/SP"
-    },
-    receptor_info: {
-      nome: "CUFA",
-      telefone: "(11) 98888-8888",
-      email: "cufa@email.com",
-      endereco: "Av. Principal, 456 - São Paulo/SP"
-    }
-  },
-  {
-    id_doacao: 17,
-    doador: "Atacadão",
-    receptor: "Lar de Idosos Vovó Maria",
-    descricao: "Cesta de alimentos variados",
-    quantidade: 5,
-    unidade: "UNIDADE",
-    validade: "2024-11-30",
-    data_cadastro: "2024-02-01",
-    data: null,
-    fotografia: "/images/cesta.jpg",
-    status: "Disponível",
-    confirmacao_entrega: false,
-    confirmacao_recebimento: false,
-    endereco: {
-      logradouro: "Rua das Flores",
-      numero: "123",
-      cep: "01234-567",
-      cidade: "São Paulo",
-      estado: "SP"
-    },
-    doador_info: {
-      nome: "Atacadão",
-      telefone: "(11) 99999-9999",
-      email: "contato@atacadao.com",
-      endereco: "Rua das Flores, 123 - São Paulo/SP"
-    },
-    receptor_info: {
-      nome: "Lar de Idosos Vovó Maria",
-      telefone: "(11) 97777-7777",
-      email: "lar.vovomaria@email.com",
-      endereco: "Rua da Solidariedade, 300 - São Paulo/SP"
-    }
-  },
-  {
-    id_doacao: 18,
-    doador: "Cabana do Sol",
-    receptor: "Lar das Crianças",
-    descricao: "Pacote de arroz 5kg",
-    quantidade: 15,
-    unidade: "KG",
-    validade: "2024-07-15",
-    data_cadastro: "2024-02-05",
-    data: null,
-    fotografia: "/images/arroz.jpg",
-    status: "Reservada",
-    confirmacao_entrega: false,
-    confirmacao_recebimento: false,
-    endereco: {
-      logradouro: "Avenida Brasil",
-      numero: "456",
-      cep: "04567-890",
-      cidade: "Rio de Janeiro",
-      estado: "RJ"
-    },
-    doador_info: {
-      nome: "Cabana do Sol",
-      telefone: "(21) 97777-7777",
-      email: "cabanadosol@email.com",
-      endereco: "Avenida Brasil, 456 - Rio de Janeiro/RJ"
-    },
-    receptor_info: {
-      nome: "Lar das Crianças",
-      telefone: "(21) 95555-5555",
-      email: "lar.criancas@email.com",
-      endereco: "Rua da Esperança, 100 - Rio de Janeiro/RJ"
-    }
-  },
-  {
-    id_doacao: 19,
-    doador: "Supermercado Mateus",
-    receptor: "Asilo São Vicente",
-    descricao: "Leite integral caixa 1L",
-    quantidade: 25,
-    unidade: "LITRO",
-    validade: "2024-09-20",
-    data_cadastro: "2024-02-10",
-    data: null,
-    fotografia: "/images/leite.png",
-    status: "Disponível",
-    confirmacao_entrega: false,
-    confirmacao_recebimento: false,
-    endereco: {
-      logradouro: "Rua das Palmeiras",
-      numero: "789",
-      cep: "30123-456",
-      cidade: "Belo Horizonte",
-      estado: "MG"
-    },
-    doador_info: {
-      nome: "Supermercado Mateus",
-      telefone: "(31) 3555-5555",
-      email: "mateus@email.com",
-      endereco: "Rua das Palmeiras, 789 - Belo Horizonte/MG"
-    },
-    receptor_info: {
-      nome: "Asilo São Vicente",
-      telefone: "(31) 3333-3333",
-      email: "asilo.svicente@email.com",
-      endereco: "Rua da Caridade, 200 - Belo Horizonte/MG"
-    }
-  },
-  // NOVAS DOAÇÕES FINALIZADAS
-  {
-    id_doacao: 60,
-    doador: "Padaria Pão Quente",
-    receptor: "Creche Esperança",
-    descricao: "Pães franceses",
-    quantidade: 100,
-    unidade: "UNIDADE",
-    validade: "2024-03-15",
-    data_cadastro: "2024-02-20",
-    data: "2024-02-25",
-    fotografia: "/images/paes.jpg",
-    status: "Finalizada",
-    confirmacao_entrega: true,
-    confirmacao_recebimento: true,
-    endereco: {
-      logradouro: "Rua do Comércio",
-      numero: "321",
-      cep: "05432-100",
-      cidade: "São Paulo",
-      estado: "SP"
-    },
-    doador_info: {
-      nome: "Padaria Pão Quente",
-      telefone: "(11) 94444-4444",
-      email: "paoquente@email.com",
-      endereco: "Rua do Comércio, 321 - São Paulo/SP"
-    },
-    receptor_info: {
-      nome: "Creche Esperança",
-      telefone: "(11) 93333-3333",
-      email: "creche.esperanca@email.com",
-      endereco: "Rua da Educação, 150 - São Paulo/SP"
-    }
-  },
-  {
-    id_doacao: 70,
-    doador: "Frutaria Fruta Boa",
-    receptor: "Hospital Infantil",
-    descricao: "Frutas variadas (maçã, banana, laranja)",
-    quantidade: 50,
-    unidade: "KG",
-    validade: "2024-03-10",
-    data_cadastro: "2024-02-18",
-    data: "2024-02-22",
-    fotografia: "/images/frutas.jpg",
-    status: "Finalizada",
-    confirmacao_entrega: true,
-    confirmacao_recebimento: true,
-    endereco: {
-      logradouro: "Avenida das Frutas",
-      numero: "555",
-      cep: "02222-333",
-      cidade: "Rio de Janeiro",
-      estado: "RJ"
-    },
-    doador_info: {
-      nome: "Frutaria Fruta Boa",
-      telefone: "(21) 92222-2222",
-      email: "frutaboa@email.com",
-      endereco: "Avenida das Frutas, 555 - Rio de Janeiro/RJ"
-    },
-    receptor_info: {
-      nome: "Hospital Infantil",
-      telefone: "(21) 91111-1111",
-      email: "hospital.infantil@email.com",
-      endereco: "Rua da Saúde, 400 - Rio de Janeiro/RJ"
-    }
-  },
-  {
-    id_doacao: 90,
-    doador: "Restaurante Sabor Caseiro",
-    receptor: "Albergue Noturna",
-    descricao: "Refeições completas (arroz, feijão, carne, salada)",
-    quantidade: 80,
-    unidade: "UNIDADE",
-    validade: "2024-03-05",
-    data_cadastro: "2024-02-15",
-    data: "2024-02-20",
-    fotografia: "/images/refeicoes.jpg",
-    status: "Finalizada",
-    confirmacao_entrega: true,
-    confirmacao_recebimento: true,
-    endereco: {
-      logradouro: "Rua da Gastronomia",
-      numero: "777",
-      cep: "03333-444",
-      cidade: "Belo Horizonte",
-      estado: "MG"
-    },
-    doador_info: {
-      nome: "Restaurante Sabor Caseiro",
-      telefone: "(31) 36666-6666",
-      email: "saborcaseiro@email.com",
-      endereco: "Rua da Gastronomia, 777 - Belo Horizonte/MG"
-    },
-    receptor_info: {
-      nome: "Albergue Noturna",
-      telefone: "(31) 37777-7777",
-      email: "albergue.noturna@email.com",
-      endereco: "Rua do Acolhimento, 250 - Belo Horizonte/MG"
-    }
-  }
-];
+import { PageLoading } from "@/app/components/PageLoading";
+import { apiFetch } from "@/app/utils/apifetch";
+import { API_ROUTES } from "@/app/utils/routes";
 
 const DoacaoDetalhesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -290,53 +50,85 @@ const DoacaoDetalhesPage = () => {
   const params = useParams();
   const { showAlert } = useAlert();
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    
-    if (!user) {
+  async function carregar_dados() {
+    try{
+        setIsLoading(true)
+        const response = await apiFetch(API_ROUTES.DOACAO.GET(params.id),{
+          method: "GET",
+          auth: true
+        })
+        const data = await response.json()
+        if(!response.ok){
+          throw new Error("Erro ao buscar dados da doação.")
+        }
+        console.log("data: ", data)
+        setDoacao(data)
+    }catch{
       showAlert({
         isError: true,
         topMessage: "Erro!",
-        bottomMessage: "O usuário não tem permissão para visualizar esta página."
-      });
-      router.push("/login");
-      return;
+        bottomMessage:"Erro ao buscar dados da doação. Tente novamente mais tarde.",
+      })
+    }finally{
+      setIsLoading(false)
     }
+  }
 
-    setPerfil(user.perfil);
+  useEffect(()=>{
+    const user = JSON.parse(localStorage.getItem("user"));
+    carregar_dados()
+    if(user){
+      setPerfil(user.perfil);
+    }
+  },[params])
 
-    const fetchDoacao = async () => {
-      try {
-        setIsLoading(true);
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+    
+  //   if (!user) {
+  //     showAlert({
+  //       isError: true,
+  //       topMessage: "Erro!",
+  //       bottomMessage: "O usuário não tem permissão para visualizar esta página."
+  //     });
+  //     router.push("/login");
+  //     return;
+  //   }
+
+  //   setPerfil(user.perfil);
+
+  //   const fetchDoacao = async () => {
+  //     try {
+  //       setIsLoading(true);
         
-        setTimeout(() => {
-          const doacaoEncontrada = mockDoacoes.find(d => d.id_doacao === parseInt(params.id));
-          /*if (doacaoEncontrada) {
-            setDoacao(doacaoEncontrada);
-          } else {
-            showAlert({
-              isError: true,
-              topMessage: "Erro!",
-              bottomMessage: "Doação não encontrada."
-            });
-          }*/
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        console.error('Erro ao carregar doação:', error);
-        showAlert({
-          isError: true,
-          topMessage: "Erro!",
-          bottomMessage: "Erro ao carregar os dados da doação."
-        });
-        setIsLoading(false);
-      }
-    };
+  //       setTimeout(() => {
+  //         const doacaoEncontrada = mockDoacoes.find(d => d.id_doacao === parseInt(params.id));
+  //         /*if (doacaoEncontrada) {
+  //           setDoacao(doacaoEncontrada);
+  //         } else {
+  //           showAlert({
+  //             isError: true,
+  //             topMessage: "Erro!",
+  //             bottomMessage: "Doação não encontrada."
+  //           });
+  //         }*/
+  //         setIsLoading(false);
+  //       }, 1000);
+  //     } catch (error) {
+  //       console.error('Erro ao carregar doação:', error);
+  //       showAlert({
+  //         isError: true,
+  //         topMessage: "Erro!",
+  //         bottomMessage: "Erro ao carregar os dados da doação."
+  //       });
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    if (params.id) {
-      fetchDoacao();
-    }
-  }, [params.id, router, showAlert]);
+  //   if (params.id) {
+  //     fetchDoacao();
+  //   }
+  // }, [params.id, router, showAlert]);
 
   const formatarData = (dataString) => {
     if (!dataString) return "Não definida";
@@ -436,14 +228,6 @@ const DoacaoDetalhesPage = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center">
-        <span className="text-gray-500">Carregando...</span>
-      </div>
-    );
-  }
-
   if (!doacao) {
     return (
       <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center">
@@ -452,7 +236,7 @@ const DoacaoDetalhesPage = () => {
     );
   }
 
-  return (
+  return (isLoading ? <PageLoading/> :
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center font-['PoppinsRegular'] mb-10">
       <div className="flex flex-col items-center gap-10 w-full">
         <div className="page-title mt-[60px] text-center">
@@ -532,7 +316,7 @@ const DoacaoDetalhesPage = () => {
             />
             
             <TextInput
-              value={formatarData(doacao.data)}
+              value={formatarData(doacao.data_entrega)}
               setValue={()=>{}}
               label={"DATA DA ENTREGA"}
               disabled
@@ -541,38 +325,29 @@ const DoacaoDetalhesPage = () => {
           </div>
 
           <div className="w-full max-w-[720px] grid grid-cols-1 md:grid-cols-2 gap-6">
-            {perfil === "Doador" && doacao.receptor && (
-              <TextInput
-                value={doacao.receptor}
-                setValue={()=>{}}
-                label={"RECEPTOR"}
-                disabled
-                type="text"
-              />
-            )}
-            
-            {perfil === "Receptor" && (
-              <TextInput
-                value={doacao.doador}
-                setValue={()=>{}}
-                label={"DOADOR"}
-                disabled
-                type="text"
-              />
-            )}
+            <TextInput
+              value={doacao.receptor}
+              setValue={()=>{}}
+              label={"RECEPTOR"}
+              disabled
+              type="text"
+            />
+            <TextInput
+              value={doacao.doador}
+              setValue={()=>{}}
+              label={"DOADOR"}
+              disabled
+              type="text"
+            />
           </div>
 
           <div className="w-full max-w-[720px]">
             <h3 className="text-lg font-medium text-gray-700 mb-4">
-              {perfil === "Doador" && doacao.receptor_info 
-                ? "INFORMAÇÕES DE CONTATO DO RECEPTOR" 
-                : "INFORMAÇÕES DE CONTATO DO DOADOR"}
+              INFORMAÇÕES DE CONTATO DO RECEPTOR
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <TextInput
-                value={perfil === "Doador" && doacao.receptor_info 
-                  ? doacao.receptor_info.telefone 
-                  : doacao.doador_info.telefone}
+                value={doacao.receptor_info.telefone}
                 setValue={()=>{}}
                 label={"TELEFONE"}
                 disabled
@@ -580,9 +355,7 @@ const DoacaoDetalhesPage = () => {
               />
               
               <TextInput
-                value={perfil === "Doador" && doacao.receptor_info 
-                  ? doacao.receptor_info.email 
-                  : doacao.doador_info.email}
+                value={doacao.receptor_info.email}
                 setValue={()=>{}}
                 label={"E-MAIL"}
                 disabled
@@ -592,9 +365,7 @@ const DoacaoDetalhesPage = () => {
             
             <div className="mt-6">
               <TextInput
-                value={perfil === "Doador" && doacao.receptor_info 
-                  ? doacao.receptor_info.endereco 
-                  : doacao.doador_info.endereco}
+                value={doacao.receptor_info.endereco}
                 setValue={()=>{}}
                 label={"ENDEREÇO COMPLETO"}
                 disabled
@@ -602,7 +373,38 @@ const DoacaoDetalhesPage = () => {
               />
             </div>
           </div>
-
+          <div className="w-full max-w-[720px]">
+          <h3 className="text-lg font-medium text-gray-700 mb-4">
+            INFORMAÇÕES DE CONTATO DO DOADOR
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TextInput
+              value={doacao.doador_info.telefone}
+              setValue={()=>{}}
+              label={"TELEFONE"}
+              disabled
+              type="text"
+            />
+            
+            <TextInput
+              value={doacao.doador_info.email}
+              setValue={()=>{}}
+              label={"E-MAIL"}
+              disabled
+              type="text"
+            />
+          </div>
+          
+          <div className="mt-6">
+            <TextInput
+              value={doacao.doador_info.endereco}
+              setValue={()=>{}}
+              label={"ENDEREÇO COMPLETO"}
+              disabled
+              type="text"
+            />
+          </div>
+        </div>
           <div className="w-full max-w-[720px]">
             <h3 className="text-lg font-medium text-gray-700 mb-4">ENDEREÇO DE RETIRADA</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

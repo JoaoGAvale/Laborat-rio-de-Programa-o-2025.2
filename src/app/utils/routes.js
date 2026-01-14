@@ -15,7 +15,7 @@ export const API_ROUTES = {
 
     },
     DOACAO:{
-
+        GET:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`
     },
     ENDERECO:{
 
