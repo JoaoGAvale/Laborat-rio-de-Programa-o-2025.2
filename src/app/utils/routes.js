@@ -1,3 +1,4 @@
+import { ArrowUpAZ } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,7 +16,9 @@ export const API_ROUTES = {
 
     },
     DOACAO:{
-        GET:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`
+        GET:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`,
+        UPDATE:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`,
+        LISTAR:(param)=>`${API_URL}/doacao/?${param}`,
     },
     ENDERECO:{
 

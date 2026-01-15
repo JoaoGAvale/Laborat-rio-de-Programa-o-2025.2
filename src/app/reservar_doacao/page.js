@@ -39,7 +39,7 @@ export default function ReceberDoacoesPage() {
   // Ações específicas para doações
   const actions = [
     {
-      icon: <ClipboardCheck size={22} />,
+      icon: (item)=> <ClipboardCheck size={22} />,
       title: "Reservar Doação",
       className: "text-green-800 cursor-pointer",
       onClick: (item)=>{reservarDoacao(item.id_doacao)}

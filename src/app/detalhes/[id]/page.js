@@ -14,7 +14,9 @@ const DoacaoDetalhesPage = () => {
   const [doacao, setDoacao] = useState({
     id_doacao: 12,
     doador: "Atacadão",
+    doador_id: 5,
     receptor: "CUFA",
+    receptor_id: 8,
     descricao: "Cesta de alimentos variados",
     quantidade: 3,
     unidade: "UNIDADE",
@@ -46,6 +48,7 @@ const DoacaoDetalhesPage = () => {
     }
   },);
   const [perfil, setPerfil] = useState("");
+  const [user, setUser] = useState(null)
   const router = useRouter();
   const params = useParams();
   const { showAlert } = useAlert();
@@ -75,10 +78,12 @@ const DoacaoDetalhesPage = () => {
   }
 
   useEffect(()=>{
-    const user = JSON.parse(localStorage.getItem("user"));
+    const userlocal = JSON.parse(localStorage.getItem("user"));
+    console.log(userlocal)
     carregar_dados()
-    if(user){
-      setPerfil(user.perfil);
+    if(userlocal){
+      setPerfil(userlocal.perfil);
+      setUser(userlocal);
     }
   },[params])
 
@@ -192,24 +197,98 @@ const DoacaoDetalhesPage = () => {
     //router.push('/cadastro_doacao');
   };
 
-  const handleConfirmarEntrega = () => {
-    if (doacao) {
-      const doacaoAtualizada = {
-        ...doacao,
-        status: "Finalizada",
-        confirmacao_entrega: true,
-        confirmacao_recebimento: true,
-        data: new Date().toISOString().split('T')[0]
-      };
-      setDoacao(doacaoAtualizada);
-      
-      showAlert({
-        isError: false,
-        topMessage: "Sucesso!",
-        bottomMessage: "Entrega confirmada com sucesso."
-      });
+  async function confirmar_entrega() {
+    try{
+        //setRealizandoOperacao(true)
+        const response = await apiFetch(API_ROUTES.DOACAO.UPDATE(params.id),{
+            method:"PUT",
+            auth:true,
+            body:{
+                confirmacao_entrega:true, 
+            }
+        })
+        const data = await response.json()
+        if(!response.ok){
+            throw new Error("Erro ao confirmar entrega. Tente novamente mais tarde.")
+        }
+        showAlert({
+            isError: false,
+            topMessage: "Sucesso!",
+            bottomMessage:"Entrega confirmada com sucesso.",
+        })
+        setDoacao(data)
+    }catch(e){
+        showAlert({
+            isError: true,
+            topMessage: "Erro!",
+            bottomMessage:e.message,
+        })
+    }finally{
+        //setRealizandoOperacao(false)
     }
-  };
+  }
+
+   async function reservar() {
+    try{
+        //setRealizandoOperacao(true)
+        const response = await apiFetch(API_ROUTES.DOACAO.UPDATE(params.id),{
+            method:"PUT",
+            auth:true,
+            body:{
+                status:"Reservada", 
+            }
+        })
+        const data = await response.json()
+        if(!response.ok){
+            throw new Error("Erro ao reservar doação. Tente novamente mais tarde.")
+        }
+        showAlert({
+            isError: false,
+            topMessage: "Sucesso!",
+            bottomMessage:"Doação reservada com sucesso.",
+        })
+        setDoacao(data)
+    }catch(e){
+        showAlert({
+            isError: true,
+            topMessage: "Erro!",
+            bottomMessage:e.message,
+        })
+    }finally{
+        //setRealizandoOperacao(false)
+    }
+  }
+
+  async function confirmar_recebimento() {
+    try{
+        //setRealizandoOperacao(true)
+        const response = await apiFetch(API_ROUTES.DOACAO.UPDATE(params.id),{
+            method:"PUT",
+            auth:true,
+            body:{
+                confirmacao_recebimento:true, 
+            }
+        })
+        const data = await response.json()
+        if(!response.ok){
+            throw new Error("Erro ao confirmar recebimento. Tente novamente mais tarde.")
+        }
+        showAlert({
+            isError: false,
+            topMessage: "Sucesso!",
+            bottomMessage:"Recebimento confirmado com sucesso.",
+        })
+        setDoacao(data)
+    }catch(e){
+        showAlert({
+            isError: true,
+            topMessage: "Erro!",
+            bottomMessage:e.message,
+        })
+    }finally{
+        //setRealizandoOperacao(false)
+    }
+  }
 
   const handleEntrarContato = () => {
     const contato = perfil === "Doador" ? doacao?.receptor_info : doacao?.doador_info;
@@ -227,6 +306,11 @@ const DoacaoDetalhesPage = () => {
       });
     }
   };
+
+  useEffect(()=>{
+    console.log("Doação: ", doacao)
+    console.log("user: ", user)
+  },[doacao, user])
 
   if (!doacao) {
     return (
@@ -453,38 +537,106 @@ const DoacaoDetalhesPage = () => {
             </div>
           </div>
 
-          {(perfil === "Admin" || doacao.status === "Finalizada") && (
-            <div className="w-full max-w-[720px]">
-              <h3 className="text-lg font-medium text-gray-700 mb-4">CONFIRMAÇÕES</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex flex-col">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ENTREGA CONFIRMADA
-                  </label>
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    doacao.confirmacao_entrega 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {doacao.confirmacao_entrega ? 'Sim' : 'Não'}
-                  </span>
+          {doacao.status === "Reservada" && doacao && (
+            <>
+              {/* ===== DOADOR ===== */}
+              {doacao.doador_id === user.id_usuario && (
+                <div className="w-full max-w-[720px]">
+                  <h3 className="text-lg font-medium text-gray-700 mb-4">
+                    CONFIRMAÇÕES
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        ENTREGA CONFIRMADA
+                      </label>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          doacao.confirmacao_entrega
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {doacao.confirmacao_entrega ? "Sim" : "Não"}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        RECEBIMENTO CONFIRMADO
+                      </label>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          doacao.confirmacao_recebimento
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {doacao.confirmacao_recebimento ? "Sim" : "Não"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {!doacao.confirmacao_entrega && (
+                    <Botao
+                      text="CONFIRMAR ENTREGA"
+                      onClick={confirmar_entrega}
+                    />
+                  )}
                 </div>
-                
-                <div className="flex flex-col">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    RECEBIMENTO CONFIRMADO
-                  </label>
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    doacao.confirmacao_recebimento 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {doacao.confirmacao_recebimento ? 'Sim' : 'Não'}
-                  </span>
+              )}
+
+              {/* ===== RECEPTOR ===== */}
+              {doacao.receptor_id === user.id_usuario && doacao && (
+                <div className="w-full max-w-[720px]">
+                  <h3 className="text-lg font-medium text-gray-700 mb-4">
+                    CONFIRMAÇÕES
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        ENTREGA CONFIRMADA
+                      </label>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          doacao.confirmacao_entrega
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {doacao.confirmacao_entrega ? "Sim" : "Não"}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        RECEBIMENTO CONFIRMADO
+                      </label>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          doacao.confirmacao_recebimento
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {doacao.confirmacao_recebimento ? "Sim" : "Não"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {!doacao.confirmacao_recebimento && (
+                    <Botao
+                      text="CONFIRMAR RECEBIMENTO"
+                      onClick={confirmar_recebimento}
+                    />
+                  )}
                 </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
+
 
           <div className="flex flex-row justify-between w-full max-w-[720px] pt-[24px]">
             <Botao
@@ -494,10 +646,10 @@ const DoacaoDetalhesPage = () => {
             />
             
             <div className="flex gap-4">
-              {perfil === "Receptor" && (
+              {(perfil === "Receptor" && doacao.status === "Disponivel") && (
                 <>
                   <Botao
-                    onClick={handleReservarDoacao}
+                    onClick={reservar}
                     type="normal"
                     text="RESERVAR DOAÇÃO"
                   />
@@ -517,7 +669,7 @@ const DoacaoDetalhesPage = () => {
                 />
               )*/}
 
-              {perfil === "Doador" && (
+              {doacao.doador_id === user.id_usuario && doacao.status === "Disponivel" && (
                 <>
                   <Botao
                     onClick={handleEditarDoacao}
