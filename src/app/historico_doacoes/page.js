@@ -5,6 +5,7 @@ import GenericTable from "../components/GenericTable";
 import { Eye } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
 import { useRouter } from "next/navigation";
+import { PageLoading } from "../components/PageLoading";
 
 export default function HistoricoDoacoesPage() {
   const [columns, setColumns] = useState([])
@@ -49,7 +50,7 @@ export default function HistoricoDoacoesPage() {
         {
           key: "data_cadastro",
           label: "DATA DA ENTREGA",
-          render: (item) => new Date(item.data_entrega).toLocaleDateString("pt-BR")
+          render: (item) => item.data_entrega ?? "Não definida"
         },
       ])
       
@@ -86,7 +87,7 @@ export default function HistoricoDoacoesPage() {
 
   console.log(doacoes)
 
-  return isLoading? <div></div> : (
+  return isLoading? <PageLoading /> : (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] text-black">
 
       <main className="pt-24 flex flex-col items-center gap-6 mb-10">

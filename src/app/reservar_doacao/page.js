@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import GenericTable from "../components/GenericTable";
 import { ClipboardCheck } from "lucide-react";
 import { useAlert } from "../context/AlertContext";
+import { PageLoading } from "../components/PageLoading";
+import { apiFetch } from "../utils/apifetch";
+import { API_ROUTES } from "../utils/routes";
 
 export default function ReceberDoacoesPage() {
 
@@ -28,7 +31,7 @@ export default function ReceberDoacoesPage() {
     {
       key: "validade",
       label: "Validade",
-      render: (item) => new Date(item.validade).toLocaleDateString("pt-BR")
+      render: (item)=> item.validade?? "Não definida"
     },
     {
       key: "status",
@@ -86,7 +89,40 @@ export default function ReceberDoacoesPage() {
     });
   }
 
-  return (
+  async function reservarDoacao(id) {
+    try{
+        //setRealizandoOperacao(true)
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await apiFetch(API_ROUTES.DOACAO.UPDATE(id),{
+            method:"PUT",
+            auth:true,
+            body:{
+                status:"Reservada",
+                receptor_id:user.id_usuario
+            }
+        })
+        const data = await response.json()
+        if(!response.ok){
+            throw new Error("Erro ao reservar doação. Tente novamente mais tarde.")
+        }
+        showAlert({
+            isError: false,
+            topMessage: "Sucesso!",
+            bottomMessage:"Doação reservada com sucesso.",
+        })
+        setDoacoes(prev => prev.filter(doacao => doacao.id_doacao !== id));
+    }catch(e){
+        showAlert({
+            isError: true,
+            topMessage: "Erro!",
+            bottomMessage:e.message,
+        })
+    }finally{
+        //setRealizandoOperacao(false)
+    }
+  }
+
+  return ( isLoading ? <PageLoading /> :
     <div className="w-full min-h-screen bg-gray-50 flex flex-col font-['PoppinsRegular'] text-black">
 
       <main className="pt-24 px-6 flex flex-col items-center gap-6 mb-10">

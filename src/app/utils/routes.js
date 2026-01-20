@@ -19,6 +19,7 @@ export const API_ROUTES = {
         GET:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`,
         UPDATE:(doacao_id)=>`${API_URL}/doacao/${doacao_id}`,
         LISTAR:(param)=>`${API_URL}/doacao/?${param}`,
+        ACOMPANHAR:`${API_URL}/doacao/acompanhar`,
     },
     ENDERECO:{
 

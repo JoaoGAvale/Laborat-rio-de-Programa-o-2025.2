@@ -11,42 +11,7 @@ import { API_ROUTES } from "@/app/utils/routes";
 
 const DoacaoDetalhesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [doacao, setDoacao] = useState({
-    id_doacao: 12,
-    doador: "Atacadão",
-    doador_id: 5,
-    receptor: "CUFA",
-    receptor_id: 8,
-    descricao: "Cesta de alimentos variados",
-    quantidade: 3,
-    unidade: "UNIDADE",
-    validade: "2024-12-31",
-    data_cadastro: "2024-01-15",
-    data: "2025-01-22",
-    fotografia: "/images/cesta.jpg",
-    status: "Disponível",
-    confirmacao_entrega: false,
-    confirmacao_recebimento: false,
-    endereco: {
-      logradouro: "Rua das Flores",
-      numero: "123",
-      cep: "01234-567",
-      cidade: "São Paulo",
-      estado: "SP"
-    },
-    doador_info: {
-      nome: "Atacadão",
-      telefone: "(11) 99999-9999",
-      email: "contato@atacadao.com",
-      endereco: "Rua das Flores, 123 - São Paulo/SP"
-    },
-    receptor_info: {
-      nome: "CUFA",
-      telefone: "(11) 98888-8888",
-      email: "cufa@email.com",
-      endereco: "Av. Principal, 456 - São Paulo/SP"
-    }
-  },);
+  const [doacao, setDoacao] = useState();
   const [perfil, setPerfil] = useState("");
   const [user, setUser] = useState(null)
   const router = useRouter();
@@ -87,59 +52,6 @@ const DoacaoDetalhesPage = () => {
     }
   },[params])
 
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
-    
-  //   if (!user) {
-  //     showAlert({
-  //       isError: true,
-  //       topMessage: "Erro!",
-  //       bottomMessage: "O usuário não tem permissão para visualizar esta página."
-  //     });
-  //     router.push("/login");
-  //     return;
-  //   }
-
-  //   setPerfil(user.perfil);
-
-  //   const fetchDoacao = async () => {
-  //     try {
-  //       setIsLoading(true);
-        
-  //       setTimeout(() => {
-  //         const doacaoEncontrada = mockDoacoes.find(d => d.id_doacao === parseInt(params.id));
-  //         /*if (doacaoEncontrada) {
-  //           setDoacao(doacaoEncontrada);
-  //         } else {
-  //           showAlert({
-  //             isError: true,
-  //             topMessage: "Erro!",
-  //             bottomMessage: "Doação não encontrada."
-  //           });
-  //         }*/
-  //         setIsLoading(false);
-  //       }, 1000);
-  //     } catch (error) {
-  //       console.error('Erro ao carregar doação:', error);
-  //       showAlert({
-  //         isError: true,
-  //         topMessage: "Erro!",
-  //         bottomMessage: "Erro ao carregar os dados da doação."
-  //       });
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   if (params.id) {
-  //     fetchDoacao();
-  //   }
-  // }, [params.id, router, showAlert]);
-
-  const formatarData = (dataString) => {
-    if (!dataString) return "Não definida";
-    return new Date(dataString).toLocaleDateString('pt-BR');
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'Disponível': return 'bg-green-500';
@@ -167,23 +79,7 @@ const DoacaoDetalhesPage = () => {
     }
     return doacao?.status;
   };
-
-  const handleReservarDoacao = () => {
-    if (doacao && perfil === "Receptor") {
-      const doacaoAtualizada = {
-        ...doacao,
-        status: "Reservada"
-      };
-      setDoacao(doacaoAtualizada);
-      
-      showAlert({
-        isError: false,
-        topMessage: "Sucesso!",
-        bottomMessage: "Doação reservada com sucesso."
-      });
-    }
-  };
-
+  
   const handleCancelarDoacao = () => {
     showAlert({
       isError: false,
@@ -382,7 +278,7 @@ const DoacaoDetalhesPage = () => {
             />
             
             <TextInput
-              value={formatarData(doacao.validade)}
+              value={doacao.validade ?? "Não definida"}
               setValue={()=>{}}
               label={"DATA DE VALIDADE"}
               disabled
@@ -392,7 +288,7 @@ const DoacaoDetalhesPage = () => {
 
           <div className="w-full max-w-[720px] grid grid-cols-1 md:grid-cols-2 gap-6">
             <TextInput
-              value={formatarData(doacao.data_cadastro)}
+              value={doacao.data_cadastro??"Não definida"}
               setValue={()=>{}}
               label={"DATA DE CADASTRO"}
               disabled
@@ -400,7 +296,7 @@ const DoacaoDetalhesPage = () => {
             />
             
             <TextInput
-              value={formatarData(doacao.data_entrega)}
+              value={doacao.data_entrega ?? "Não definida"}
               setValue={()=>{}}
               label={"DATA DA ENTREGA"}
               disabled

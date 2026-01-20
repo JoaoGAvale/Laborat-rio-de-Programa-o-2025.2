@@ -27,13 +27,7 @@ export default function AcompanharDoacoesPage() {
 
   async function fetchData(usuario){
       try{
-          const params = new URLSearchParams(usuario?.perfil === "Doador" ?{
-              doador_id:usuario.id_usuario,
-            }:{
-              receptor_id:usuario.id_usuario,
-              status:"Reservada"
-            })
-          const response = await apiFetch(API_ROUTES.DOACAO.LISTAR(params.toString()),{
+          const response = await apiFetch(API_ROUTES.DOACAO.ACOMPANHAR,{
               method:"GET",
               auth:true,
           }
@@ -76,7 +70,7 @@ export default function AcompanharDoacoesPage() {
     {
       key: "validade",
       label: "Validade",
-      render: (item) => new Date(item.validade).toLocaleDateString("pt-BR")
+      render: (item) => item.validade ?? "Não definida"
     },
     {
       key: "status",

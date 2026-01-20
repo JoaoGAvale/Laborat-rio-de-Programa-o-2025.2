@@ -97,7 +97,7 @@ export default function NotificationPage(){
             key: "data_cadastro",
             label: "Data",
             render: (item) =>
-            new Date(item.data_cadastro).toLocaleDateString("pt-BR")
+            item.data_cadastro ?? "Não definida"
         },
         {
             key: "condicao",
