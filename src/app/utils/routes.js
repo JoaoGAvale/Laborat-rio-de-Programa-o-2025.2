@@ -10,7 +10,8 @@ export const API_ROUTES = {
     },
     USUARIO:{
         CREATE:`${API_URL}/usuario/`,
-        UPDATE:`${API_URL}/usuario/`
+        UPDATE:`${API_URL}/usuario/`,
+        GET: (usuario_id) => `${API_URL}/usuario/${usuario_id}`
     },
     CIDADE:{
 

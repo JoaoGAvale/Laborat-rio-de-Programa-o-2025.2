@@ -55,21 +55,41 @@ export const FormUsuario = ({
 
     // Usado em visualizar e editar
     async function carregar_dados() {
-        try{
-            setIsLoading(true)
-            const user = JSON.parse(localStorage.getItem("user"));
-            setNome(user.nome)
-            setCnpj(user.cnpj)
-            setEmail(user.email)
-            setTipoSelecionado(user.perfil)
-        }catch{
+        try {
+            setIsLoading(true);
+            
+            const userStored = JSON.parse(localStorage.getItem("user"));
+            
+            if (!userStored || !userStored.id_usuario) {
+                throw new Error("Usuário não encontrado no cache local.");
+            }
+
+            const response = await apiFetch(API_ROUTES.USUARIO.GET(userStored.id_usuario), {
+                method: "GET",
+                auth: true
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao buscar dados no servidor.");
+            }
+
+            const data = await response.json();
+            console.log("Dados vindos do Backend:", data);
+
+            setNome(data.nome);
+            setCnpj(data.cnpj);
+            setEmail(data.email);
+            setTipoSelecionado(data.perfil);
+
+        } catch (error) {
+            console.error("Erro no fetch:", error);
             showAlert({
                 isError: true,
                 topMessage: "Erro!",
-                bottomMessage:"Erro ao buscar dados da página de notificações. Tente novamente mais tarde.",
-            })
-        }finally{
-            setIsLoading(false)
+                bottomMessage: "Não foi possível carregar os dados atualizados do usuário.",
+            });
+        } finally {
+            setIsLoading(false);
         }
     }
 
